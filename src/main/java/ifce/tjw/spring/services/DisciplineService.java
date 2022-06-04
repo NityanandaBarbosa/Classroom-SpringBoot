@@ -1,7 +1,10 @@
 package ifce.tjw.spring.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import ifce.tjw.spring.dto.DisciplineGetDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +52,11 @@ public class DisciplineService {
 			return mapper.map(discipline, DisciplineDTO.class);
 		}
 		return null;
+	}
+	public List<DisciplineGetDTO> getAll() {
+		List<Discipline> listDisc = repo.findAll();
+		List<DisciplineGetDTO> listDto = new ArrayList<>();
+		listDisc.forEach((discipline -> listDto.add(mapper.map(discipline, DisciplineGetDTO.class))));
+		return listDto;
 	}
 }

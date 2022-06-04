@@ -28,9 +28,6 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
     public static final int TOKEN_EXPIRES = 1000000000;
     public static final String SECRET_KET = "classroom";
 
-    @Autowired
-    private ModelMapper mapper;
-
     public final AuthenticationManager authenticationManager;
 
     public JWTAuthFilter(AuthenticationManager authenticationManager) {

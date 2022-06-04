@@ -10,10 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +38,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
+
+//    @Bean
+//    public String getToken(String token) {
+//        Base64.Decoder decoder = Base64.getUrlDecoder();
+//        String[] chunks = token.split("\\.");
+//        String payload = new String(decoder.decode(chunks[1]));
+//        return  payload;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

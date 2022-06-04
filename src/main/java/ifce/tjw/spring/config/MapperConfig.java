@@ -1,5 +1,7 @@
 package ifce.tjw.spring.config;
 
+import ifce.tjw.spring.dto.DisciplineCreateDTO;
+import ifce.tjw.spring.dto.DisciplineGetDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +17,10 @@ public class MapperConfig {
 		
 		modelMapper.createTypeMap(Discipline.class, DisciplineDTO.class)
 			.<String>addMapping(src -> src.getOwner().getNome(), (dest, value) -> dest.setOwnerName(value));
-		
+
+		modelMapper.createTypeMap(Discipline.class, DisciplineGetDTO.class)
+				.<String>addMapping(src -> src.getOwner().getNome(), (dest, value) -> dest.setOwnerName(value));
+
 		return modelMapper;
 	}
 }

@@ -2,6 +2,7 @@ package ifce.tjw.spring.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ public class Discipline {
 	private User owner;
 	
 	@ManyToMany
-	private Collection<User> students = new ArrayList<User>();
+	private List<User> students = new ArrayList<User>();
 	
 	@OneToMany
 	private Collection<Activity> activities = new ArrayList<Activity>();
@@ -49,11 +50,11 @@ public class Discipline {
 		this.owner = owner;
 	}
 
-	public Collection<User> getStudents() {
+	public List<User> getStudents() {
 		return students;
 	}
 
-	public void setStudents(Collection<User> students) {
+	public void setStudents(List<User> students) {
 		this.students = students;
 	}
 
