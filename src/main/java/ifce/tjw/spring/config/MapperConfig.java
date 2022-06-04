@@ -1,4 +1,4 @@
-package ifce.tjw.spring;
+package ifce.tjw.spring.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

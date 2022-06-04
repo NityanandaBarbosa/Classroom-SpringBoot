@@ -7,4 +7,5 @@ import ifce.tjw.spring.entity.User;
 
 @RepositoryRestResource(exported = false)
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findUserByEmail(String email);
 }

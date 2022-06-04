@@ -49,4 +49,21 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("/auth")
+	public ResponseEntity<UserDTO> auth(@RequestBody UserCreateDTO dto) {
+		try {
+			if(dto.getEmail().isEmpty() || dto.getPassword().isEmpty()) {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}else {
+				UserDTO user = service.login(dto.getEmail());
+				if(user != null) {
+					return new ResponseEntity<> (user, HttpStatus.OK);
+				}
+			}
+		}catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
