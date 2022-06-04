@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -54,12 +56,19 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserData userData = (UserData) authResult.getPrincipal();
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", userData.getName());
+        user.put("id", userData.getUserId());
+        Date date = new Date(System.currentTimeMillis() + TOKEN_EXPIRES);
         String token = JWT.create()
                 .withSubject(userData.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRES))
+                .withPayload(user)
+                .withExpiresAt(date)
                 .sign(Algorithm.HMAC512(SECRET_KET));
-
-        response.getWriter().write(token);
-        response.getWriter().flush();
+        Map<String, String> tokenInfo = new HashMap<>();
+        response.setContentType("application/json");
+        tokenInfo.put("access_token", token);
+        tokenInfo.put("expires_at", String.valueOf(date));
+        new ObjectMapper().writeValue(response.getOutputStream(), tokenInfo);
     }
 }

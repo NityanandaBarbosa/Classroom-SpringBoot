@@ -15,6 +15,14 @@ public class UserData implements UserDetails {
         this.user = user;
     }
 
+    public Long getUserId(){
+        return this.user.get().getId();
+    }
+
+    public String getName(){
+        return this.user.get().getNome();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
