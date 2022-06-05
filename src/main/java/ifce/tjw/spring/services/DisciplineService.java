@@ -20,13 +20,17 @@ import ifce.tjw.spring.repositories.UserRepository;
 
 @Service
 public class DisciplineService {
+	private final UserRepository userRepo;
+
 	@Autowired
 	private DisciplineRepository repo;
 	@Autowired
-	private UserRepository userRepo;
-	@Autowired
 	private ModelMapper mapper;
-	
+
+	public DisciplineService(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
+
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto) {
 		Discipline discipline = new Discipline();
@@ -53,10 +57,11 @@ public class DisciplineService {
 		}
 		return null;
 	}
-	public List<DisciplineGetDTO> getAll() {
-		List<Discipline> listDisc = repo.findAll();
-		List<DisciplineGetDTO> listDto = new ArrayList<>();
-		listDisc.forEach((discipline -> listDto.add(mapper.map(discipline, DisciplineGetDTO.class))));
-		return listDto;
+	public List<DisciplineGetDTO> getAllByOwnerId(Long id) {
+//		repo.findAll();
+		List<Discipline> disciplines = repo.getAllByOwnerId(id);
+		List<DisciplineGetDTO> listDTO = new ArrayList<>();
+		disciplines.forEach((disciplineObj -> listDTO.add(mapper.map(disciplineObj, DisciplineGetDTO.class))));
+		return listDTO;
 	}
 }

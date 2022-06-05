@@ -39,14 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-//    @Bean
-//    public String getToken(String token) {
-//        Base64.Decoder decoder = Base64.getUrlDecoder();
-//        String[] chunks = token.split("\\.");
-//        String payload = new String(decoder.decode(chunks[1]));
-//        return  payload;
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()

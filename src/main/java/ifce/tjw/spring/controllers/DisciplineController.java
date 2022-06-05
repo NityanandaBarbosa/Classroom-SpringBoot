@@ -2,6 +2,7 @@ package ifce.tjw.spring.controllers;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import ifce.tjw.spring.Application;
 import ifce.tjw.spring.config.JWTAuthFilter;
 import ifce.tjw.spring.dto.DisciplineGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,20 +38,15 @@ public class DisciplineController {
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	public String getToken(String token) {
-		Base64.Decoder decoder = Base64.getUrlDecoder();
-		String[] chunks = token.split("\\.");
-		String payload = new String(decoder.decode(chunks[1]));
-		return  payload;
-	}
-
 	@GetMapping
 	public ResponseEntity<List<DisciplineGetDTO>> getAll(@RequestHeader (name="Authorization") String token) {
-		System.out.println(getToken(token));
+		Map<String, String> payload =  Application.getToken(token);
+		Long id = Long.parseLong(payload.get("id"));
 		try {
-			List<DisciplineGetDTO> list =  service.getAll();
+			List<DisciplineGetDTO> list =  service.getAllByOwnerId(id);
 			return new ResponseEntity<> (list, HttpStatus.OK);
 		}catch (Exception e) {
+			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
