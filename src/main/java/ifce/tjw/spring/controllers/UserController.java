@@ -1,12 +1,8 @@
 package ifce.tjw.spring.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import ifce.tjw.spring.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ifce.tjw.spring.dto.UserCreateDTO;
 import ifce.tjw.spring.dto.UserDTO;
-import ifce.tjw.spring.services.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserController {
-	@Autowired
-	UserService service;
+	private final UserService service;
 
-	@PostMapping("/auth")
+	public UserController(UserService service) {
+		this.service = service;
+	}
+
+	@PostMapping("/sing-up")
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO dto) {
 		try {
 			if(dto.getEmail().isEmpty() || dto.getEmail().isEmpty() || dto.getNome().isEmpty()) {
@@ -40,13 +38,13 @@ public class UserController {
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
-		try {
-			UserDTO dto =  service.delete(id);
-			return new ResponseEntity<> (dto, HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	@DeleteMapping(value = "/{id}")
+//	public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
+//		try {
+//			UserDTO dto =  service.delete(id);
+//			return new ResponseEntity<> (dto, HttpStatus.OK);
+//		}catch (Exception e) {
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 }

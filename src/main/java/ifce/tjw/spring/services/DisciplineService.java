@@ -49,12 +49,16 @@ public class DisciplineService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineDTO delete(Long id) {
+	public DisciplineDTO delete(Long id, Long ownerId) throws Exception {
 		Optional<Discipline> optDiscipline = repo.findById(id);
 		if(optDiscipline != null) {
 			Discipline discipline = optDiscipline.get();
-			repo.deleteById(id);
-			return mapper.map(discipline, DisciplineDTO.class);
+			if(discipline.getOwner().getId() == ownerId){
+				repo.deleteById(id);
+				return mapper.map(discipline, DisciplineDTO.class);
+			}else{
+				throw new Exception("It's not your class to delete!");
+			}
 		}
 		return null;
 	}
