@@ -66,9 +66,15 @@ public class DisciplineService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineGetDTO joinClass(Long classId, Long userId){
+	public DisciplineGetDTO joinClass(Long classId, Long userId) throws Exception {
 		User user = userRepo.findById(userId).get();
 		Discipline discipline = repo.findById(classId).get();
+		if(discipline.getOwner() == user){
+			throw new Exception("You are the owner");
+		}
+		if(discipline.getUser().contains(user)){
+			throw new Exception("You already in class");
+		}
 		discipline.getUser().add(user);
 		user.getClasses().add(discipline);
 		repo.save(discipline);
