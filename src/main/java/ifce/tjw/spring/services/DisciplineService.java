@@ -21,7 +21,6 @@ import ifce.tjw.spring.repositories.UserRepository;
 @Service
 public class DisciplineService {
 	private final UserRepository userRepo;
-
 	@Autowired
 	private DisciplineRepository repo;
 	@Autowired
@@ -32,14 +31,16 @@ public class DisciplineService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto) {
+	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto, Long userId) {
 		Discipline discipline = new Discipline();
 		discipline.setName(dto.getName());
-		Optional<User> owner = userRepo.findById(dto.getOwner_id());
+		Optional<User> owner = userRepo.findById(userId);
 		if(owner != null) {
 			User owner_true = owner.get();
+			owner_true.getClasses().add(discipline);
 			discipline.setOwner(owner_true);
 			repo.save(discipline);
+			userRepo.save(owner_true);
 			return mapper.map(discipline, DisciplineDTO.class);
 		}else {
 			System.out.println("ERROR");
@@ -58,10 +59,21 @@ public class DisciplineService {
 		return null;
 	}
 	public List<DisciplineGetDTO> getAllByOwnerId(Long id) {
-//		repo.findAll();
-		List<Discipline> disciplines = repo.getAllByOwnerId(id);
+		List<Discipline> disciplines = (List<Discipline>) userRepo.findById(id).get().getClasses();
 		List<DisciplineGetDTO> listDTO = new ArrayList<>();
 		disciplines.forEach((disciplineObj -> listDTO.add(mapper.map(disciplineObj, DisciplineGetDTO.class))));
 		return listDTO;
 	}
+
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+	public DisciplineGetDTO joinClass(Long classId, Long userId){
+		User user = userRepo.findById(userId).get();
+		Discipline discipline = repo.findById(classId).get();
+		discipline.getUser().add(user);
+		user.getClasses().add(discipline);
+		repo.save(discipline);
+		userRepo.save(user);
+		return mapper.map(discipline, DisciplineGetDTO.class);
+	}
+
 }

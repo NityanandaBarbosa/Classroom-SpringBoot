@@ -46,16 +46,10 @@ public class JWTValidateFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthToken(String token){
-//        Base64.Decoder decoder = Base64.getUrlDecoder();
-//        String[] chunks = token.split("\\.");
-//        String payload = new String(decoder.decode(chunks[1]));
         String email = JWT.require(Algorithm.HMAC512(JWTAuthFilter.SECRET_KET))
                 .build()
                 .verify(token)
                 .getSubject();
-
-//        DecodedJWT jwt = JWT.decode(token).;
-//        System.out.println("AQUI " + payload);
 
         if(email == null){
             return null;

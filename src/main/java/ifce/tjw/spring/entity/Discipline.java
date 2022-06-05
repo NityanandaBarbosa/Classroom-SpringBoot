@@ -29,7 +29,7 @@ public class Discipline {
 	private User owner;
 	
 	@ManyToMany
-	private List<User> students = new ArrayList<User>();
+	private List<User> user = new ArrayList<User>();
 	
 	@OneToMany
 	private Collection<Activity> activities = new ArrayList<Activity>();
@@ -50,12 +50,12 @@ public class Discipline {
 		this.owner = owner;
 	}
 
-	public List<User> getStudents() {
-		return students;
+	public List<User> getUser() {
+		return user;
 	}
 
-	public void setStudents(List<User> students) {
-		this.students = students;
+	public void setUser(List<User> students) {
+		this.user = students;
 	}
 
 	public Long getId() {
