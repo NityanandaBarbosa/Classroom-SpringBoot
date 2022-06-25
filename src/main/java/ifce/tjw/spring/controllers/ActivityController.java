@@ -22,7 +22,7 @@ public class ActivityController {
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<ActivityCreatedDTO> createDiscipline(@RequestBody ActivityCreateDTO dto,
+    public ResponseEntity<ActivityCreatedDTO> createActivity(@RequestBody ActivityCreateDTO dto,
             @PathVariable Long id,
             @RequestHeader(name = "Authorization") String token) {
         Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
@@ -40,7 +40,7 @@ public class ActivityController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<List<ActivityCreatedDTO>> createDiscipline(@PathVariable Long id,
+    public ResponseEntity<List<ActivityCreatedDTO>> getAllActivities(@PathVariable Long id,
                                                                      @RequestHeader(name = "Authorization") String token) {
         Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
         Long userId = Long.parseLong(payload.get("id"));
@@ -49,6 +49,23 @@ public class ActivityController {
 
             if (dtoList != null) {
                 return new ResponseEntity<>(dtoList, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<ActivityCreatedDTO> patchActivity(@RequestBody ActivityCreateDTO dto, @PathVariable Long id,
+                                                                     @RequestHeader(name = "Authorization") String token) {
+        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
+        Long userId = Long.parseLong(payload.get("id"));
+        try {
+            ActivityCreatedDTO patchedDTO = service.patchActivity(dto, userId,id);
+
+            if (patchedDTO != null) {
+                return new ResponseEntity<>(patchedDTO, HttpStatus.OK);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -56,6 +56,27 @@ public class ActivityService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public ActivityCreatedDTO patchActivity(ActivityCreateDTO dto, Long userId, Long activityId) {
+        Activity activity = repository.getReferenceById(activityId);
+        User creator = userRepository.getReferenceById(userId);
+        if(activity == null || creator == null){
+            return null;
+        }
+        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){
+            String tittle = dto.getTittle();
+            String description = dto.getDescription();
+            if(tittle != null && tittle != ""){
+                activity.setTittle(dto.getTittle());
+            }
+            if(description != null && description != ""){
+                activity.setDescription(dto.getDescription());
+            }
+            repository.save(activity);
+            return mapper.map(activity, ActivityCreatedDTO.class);
+        }
+        return null;
+    }
+
     public List<ActivityCreatedDTO> getAllActivities(Long userId, Long disciplineId) {
         List<ActivityCreatedDTO> dtoList = new ArrayList<>();
         Discipline discipline = disciplineRepository.getReferenceById(disciplineId);

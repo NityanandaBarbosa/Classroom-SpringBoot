@@ -68,16 +68,5 @@ public class DisciplineController {
 		}
 	}
 
-	// @DeleteMapping(value = "/{id}")
-	// public ResponseEntity<DisciplineDTO> deleteUser(@PathVariable Long id,
-	// @RequestHeader (name="Authorization") String token) {
-	// Map<String, String> payload = Application.getToken(token);
-	// Long userId = Long.parseLong(payload.get("id"));
-	// try {
-	// DisciplineDTO dto = service.delete(id, userId);
-	// return new ResponseEntity<> (dto, HttpStatus.OK);
-	// }catch (Exception e) {
-	// return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	// }
-	// }
+
 }
