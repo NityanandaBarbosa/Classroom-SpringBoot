@@ -77,6 +77,23 @@ public class ActivityService {
         return null;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public ActivityCreatedDTO deleteActivity(Long userId, Long activityId) {
+        Activity activity = repository.getReferenceById(activityId);
+        User creator = userRepository.getReferenceById(userId);
+        if(activity == null || creator == null){
+            return null;
+        }
+        Discipline discipline = activity.getDiscipline();
+        if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
+            discipline.getActivities().remove(activity);
+            repository.delete(activity);
+            disciplineRepository.save(discipline);
+            return mapper.map(activity, ActivityCreatedDTO.class);
+        }
+        return null;
+    }
+
     public List<ActivityCreatedDTO> getAllActivities(Long userId, Long disciplineId) {
         List<ActivityCreatedDTO> dtoList = new ArrayList<>();
         Discipline discipline = disciplineRepository.getReferenceById(disciplineId);

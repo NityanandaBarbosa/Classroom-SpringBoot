@@ -88,4 +88,20 @@ public class ActivityController {
         }
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<ActivityCreatedDTO> deleteActivity(@PathVariable Long id,
+                                                                     @RequestHeader(name = "Authorization") String token) {
+        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
+        Long userId = Long.parseLong(payload.get("id"));
+        try {
+            ActivityCreatedDTO dto = service.deleteActivity(userId, id);
+            if (dto != null) {
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
