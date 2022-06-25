@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ifce.tjw.spring.dto.DisciplineCreateDTO;
 import ifce.tjw.spring.dto.DisciplineDTO;
 import ifce.tjw.spring.services.DisciplineService;
+import ifce.tjw.spring.utils.UserInfoToken;
 
 import java.util.List;
 import java.util.Map;
@@ -24,56 +25,59 @@ public class DisciplineController {
 	}
 
 	@PostMapping
-	public ResponseEntity<DisciplineDTO> createDiscipline(@RequestBody DisciplineCreateDTO dto, @RequestHeader(name="Authorization") String token) {
-		Map<String, String> payload =  Application.getToken(token);
+	public ResponseEntity<DisciplineDTO> createDiscipline(@RequestBody DisciplineCreateDTO dto,
+			@RequestHeader(name = "Authorization") String token) {
+		Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
 		Long id = Long.parseLong(payload.get("id"));
 		try {
 			DisciplineDTO discipline = service.createDiscipline(dto, id);
-			
-			if(discipline != null) {
-				return new ResponseEntity<> (discipline, HttpStatus.CREATED);
+
+			if (discipline != null) {
+				return new ResponseEntity<>(discipline, HttpStatus.CREATED);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<DisciplineGetDTO>> getAll(@RequestHeader (name="Authorization") String token) {
-		Map<String, String> payload =  Application.getToken(token);
+	public ResponseEntity<List<DisciplineGetDTO>> getAll(@RequestHeader(name = "Authorization") String token) {
+		Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
 		Long id = Long.parseLong(payload.get("id"));
 		try {
-			List<DisciplineGetDTO> list =  service.getAllByOwnerId(id);
-			return new ResponseEntity<> (list, HttpStatus.OK);
-		}catch (Exception e) {
+			List<DisciplineGetDTO> list = service.getAllByOwnerId(id);
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PostMapping(value = "/{id}")
-	public ResponseEntity<DisciplineGetDTO> joinClass(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
-		Map<String, String> payload =  Application.getToken(token);
+	public ResponseEntity<DisciplineGetDTO> joinClass(@PathVariable Long id,
+			@RequestHeader(name = "Authorization") String token) {
+		Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
 		Long userId = Long.parseLong(payload.get("id"));
 		try {
-			DisciplineGetDTO dto =  service.joinClass(id,userId);
-			return new ResponseEntity<> (dto, HttpStatus.OK);
-		}catch (Exception e) {
+			DisciplineGetDTO dto = service.joinClass(id, userId);
+			return new ResponseEntity<>(dto, HttpStatus.OK);
+		} catch (Exception e) {
 			System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<DisciplineDTO> deleteUser(@PathVariable Long id, @RequestHeader (name="Authorization") String token) {
-//		Map<String, String> payload =  Application.getToken(token);
-//		Long userId = Long.parseLong(payload.get("id"));
-//		try {
-//			DisciplineDTO dto =  service.delete(id, userId);
-//			return new ResponseEntity<> (dto, HttpStatus.OK);
-//		}catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
+
+	// @DeleteMapping(value = "/{id}")
+	// public ResponseEntity<DisciplineDTO> deleteUser(@PathVariable Long id,
+	// @RequestHeader (name="Authorization") String token) {
+	// Map<String, String> payload = Application.getToken(token);
+	// Long userId = Long.parseLong(payload.get("id"));
+	// try {
+	// DisciplineDTO dto = service.delete(id, userId);
+	// return new ResponseEntity<> (dto, HttpStatus.OK);
+	// }catch (Exception e) {
+	// return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	// }
+	// }
 }

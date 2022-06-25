@@ -10,30 +10,34 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "tbl_activity")
+@Table(name = "tbl_activity")
 public class Activity {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	@Column
 	private String tittle;
-	
+
 	@Column
 	private String description;
-	
+
 	@ManyToOne
 	private Discipline discipline;
-	
+
+	@OneToOne
+	private User creator;
+
 	@Column
 	private double nota;
-	
+
 	@ManyToMany
 	private Collection<Comment> comments = new ArrayList<Comment>();
-	
+
 	@OneToMany
 	private Collection<Attachment> attachs = new ArrayList<Attachment>();
 
@@ -43,6 +47,14 @@ public class Activity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public User getCreator() {
+		return creator;
+	}
+
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 
 	public String getTittle() {
@@ -68,7 +80,7 @@ public class Activity {
 	public void setDiscipline(Discipline discipline) {
 		this.discipline = discipline;
 	}
-	
+
 	public Collection<Comment> getComments() {
 		return comments;
 	}
