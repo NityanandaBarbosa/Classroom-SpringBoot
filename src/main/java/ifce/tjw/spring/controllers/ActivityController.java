@@ -56,6 +56,22 @@ public class ActivityController {
         return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping(value = "/one/{activityId}")
+    public ResponseEntity<ActivityCreatedDTO> getActivity(@PathVariable Long activityId,
+                                                                     @RequestHeader(name = "Authorization") String token) {
+        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
+        Long userId = Long.parseLong(payload.get("id"));
+        try {
+            ActivityCreatedDTO dto = service.getActivity(userId, activityId);
+            if (dto != null) {
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PatchMapping(value = "/{id}")
     public ResponseEntity<ActivityCreatedDTO> patchActivity(@RequestBody ActivityCreateDTO dto, @PathVariable Long id,
                                                                      @RequestHeader(name = "Authorization") String token) {

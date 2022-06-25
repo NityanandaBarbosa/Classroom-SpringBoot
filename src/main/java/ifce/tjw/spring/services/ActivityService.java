@@ -90,4 +90,16 @@ public class ActivityService {
         }
         return null;
     }
+
+    public ActivityCreatedDTO getActivity(Long userId, Long activityId) {
+        Activity activity = repository.getReferenceById(activityId);
+        User creator = userRepository.getReferenceById(userId);
+        if(activity == null || creator == null){
+            return null;
+        }
+        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){ ;
+            return mapper.map(activity, ActivityCreatedDTO.class);
+        }
+        return null;
+    }
 }
