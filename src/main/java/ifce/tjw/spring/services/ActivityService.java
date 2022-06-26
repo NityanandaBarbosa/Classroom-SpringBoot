@@ -50,9 +50,7 @@ public class ActivityService {
         if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
             activity.setCreator(creator);
             activity.setDiscipline(discipline);
-            discipline.getActivities().add(activity);
             repository.save(activity);
-            disciplineRepository.save(discipline);
             return mapper.map(activity, ActivityCreatedDTO.class);
         }
         return null;
@@ -89,9 +87,7 @@ public class ActivityService {
         }
         Discipline discipline = activity.getDiscipline();
         if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
-            discipline.getActivities().remove(activity);
             repository.delete(activity);
-            disciplineRepository.save(discipline);
             return mapper.map(activity, ActivityCreatedDTO.class);
         }
         return null;
@@ -105,7 +101,8 @@ public class ActivityService {
             return null;
         }
         if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
-            discipline.getActivities().forEach((activity -> dtoList.add(mapper.map(activity, ActivityCreatedDTO.class))));
+            List<Activity> activityList = repository.getAllByDisciplineId(disciplineId);
+            activityList.forEach((activity -> dtoList.add(mapper.map(activity, ActivityCreatedDTO.class))));
             return dtoList;
         }
         return null;

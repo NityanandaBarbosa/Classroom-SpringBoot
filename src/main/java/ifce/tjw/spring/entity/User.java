@@ -25,11 +25,7 @@ public class User {
 	
 	@Column(name = "user_password")
 	private String password;
-	
-	@ManyToMany
-	private Collection<Discipline> classes = new ArrayList<Discipline>();
-	
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -48,14 +44,6 @@ public class User {
 
 	public Long getId() {
 		return id;
-	}
-
-	public Collection<Discipline> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Collection<Discipline> classes) {
-		this.classes = classes;
 	}
 
 	public String getPassword() {

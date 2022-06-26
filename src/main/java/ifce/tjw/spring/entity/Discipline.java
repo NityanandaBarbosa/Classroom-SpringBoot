@@ -30,9 +30,6 @@ public class Discipline {
 	
 	@ManyToMany
 	private List<User> user = new ArrayList<User>();
-	
-	@OneToMany
-	private Collection<Activity> activities = new ArrayList<Activity>();
 
 	public String getName() {
 		return name;
@@ -60,13 +57,5 @@ public class Discipline {
 
 	public Long getId() {
 		return id;
-	}
-
-	public Collection<Activity> getActivities() {
-		return activities;
-	}
-
-	public void setActivities(Collection<Activity> activities) {
-		this.activities = activities;
 	}
 }

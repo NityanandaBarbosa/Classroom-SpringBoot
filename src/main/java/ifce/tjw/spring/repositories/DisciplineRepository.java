@@ -9,5 +9,6 @@ import ifce.tjw.spring.entity.Discipline;
 import java.util.List;
 
 public interface DisciplineRepository extends JpaRepository<Discipline, Long>{
+    List<Discipline> getAllByUserId(Long id);
     List<Discipline> getAllByOwnerId(Long id);
 }
