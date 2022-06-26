@@ -17,19 +17,16 @@ public class Comment {
 	private Long id;
 	
 	@ManyToOne
-	private Activity activ;
+	private Activity activity;
 	
 	@ManyToOne
-	private User user;
+	private User sender;
 
 	@Column
 	private String message;
-	
-	@ManyToOne
-	private User professorId;
 
 	@Column
-	private Date createTime = new Date();
+	private Date createdAt = new Date();
 
 	public Long getId() {
 		return id;
@@ -39,20 +36,20 @@ public class Comment {
 		this.id = id;
 	}
 
-	public Activity getActiv() {
-		return activ;
+	public Activity getActivity() {
+		return activity;
 	}
 
-	public void setActiv(Activity activ) {
-		this.activ = activ;
+	public void setActivity(Activity activity) {
+		this.activity = activity;
 	}
 
-	public User getUser() {
-		return user;
+	public User getSender() {
+		return sender;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 
 	public String getMessage() {
@@ -63,21 +60,11 @@ public class Comment {
 		this.message = message;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreatedAt(Date createTime) {
+		this.createdAt = createTime;
 	}
-
-	public User getProfessorId() {
-		return professorId;
-	}
-
-	public void setProfessorId(User professorId) {
-		this.professorId = professorId;
-	}
-	
-	
 }

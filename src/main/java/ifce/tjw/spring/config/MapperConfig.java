@@ -1,8 +1,11 @@
 package ifce.tjw.spring.config;
 
 import ifce.tjw.spring.dto.ActivityCreatedDTO;
+import ifce.tjw.spring.dto.CommentCreatedDTO;
 import ifce.tjw.spring.dto.DisciplineGetDTO;
 import ifce.tjw.spring.entity.Activity;
+import ifce.tjw.spring.entity.Comment;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +27,9 @@ public class MapperConfig {
 
 		modelMapper.createTypeMap(Activity.class, ActivityCreatedDTO.class)
 				.<String>addMapping(src -> src.getCreator().getNome(), (dest, value) -> dest.setCreatorName(value));
+
+		modelMapper.createTypeMap(Comment.class, CommentCreatedDTO.class)
+				.<String>addMapping(src -> src.getSender().getNome(), (dest, value) -> dest.setSender(value));
 
 		return modelMapper;
 	}
