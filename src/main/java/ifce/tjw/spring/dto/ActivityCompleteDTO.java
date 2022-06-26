@@ -2,11 +2,12 @@ package ifce.tjw.spring.dto;
 
 import java.util.List;
 
-public class ActivityCreatedDTO {
+public class ActivityCompleteDTO {
     Long id;
     String tittle;
     String description;
     String creatorName;
+    List<CommentCreatedDTO> comments;
 
     public Long getId() {
         return id;
@@ -38,5 +39,13 @@ public class ActivityCreatedDTO {
 
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
+    }
+
+    public List<CommentCreatedDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentCreatedDTO> comments) {
+        this.comments = comments;
     }
 }

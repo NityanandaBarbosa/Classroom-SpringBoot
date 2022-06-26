@@ -3,6 +3,7 @@ package ifce.tjw.spring.controllers;
 import java.util.List;
 import java.util.Map;
 
+import ifce.tjw.spring.dto.ActivityCompleteDTO;
 import ifce.tjw.spring.dto.ActivityCreateDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,12 +58,12 @@ public class ActivityController {
     }
 
     @GetMapping(value = "/one/{activityId}")
-    public ResponseEntity<ActivityCreatedDTO> getActivity(@PathVariable Long activityId,
+    public ResponseEntity<ActivityCompleteDTO> getActivity(@PathVariable Long activityId,
                                                                      @RequestHeader(name = "Authorization") String token) {
         Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
         Long userId = Long.parseLong(payload.get("id"));
         try {
-            ActivityCreatedDTO dto = service.getActivity(userId, activityId);
+            ActivityCompleteDTO dto = service.getActivity(userId, activityId);
             if (dto != null) {
                 return new ResponseEntity<>(dto, HttpStatus.OK);
             }

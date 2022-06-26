@@ -1,5 +1,6 @@
 package ifce.tjw.spring.services;
 
+import ifce.tjw.spring.dto.ActivityCompleteDTO;
 import ifce.tjw.spring.dto.ActivityCreateDTO;
 import ifce.tjw.spring.dto.CommentCreatedDTO;
 import ifce.tjw.spring.entity.Comment;
@@ -108,7 +109,7 @@ public class ActivityService {
         return null;
     }
 
-    public ActivityCreatedDTO getActivity(Long userId, Long activityId) {
+    public ActivityCompleteDTO getActivity(Long userId, Long activityId) {
         Activity activity = repository.getReferenceById(activityId);
         User creator = userRepository.getReferenceById(userId);
         List<Comment> comments = commentRepository.getAllByActivityId(activityId);
@@ -118,7 +119,7 @@ public class ActivityService {
         }
         if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){
             comments.forEach((comment -> commentCreatedDTOList.add(mapper.map(comment, CommentCreatedDTO.class))));
-            ActivityCreatedDTO dto = mapper.map(activity, ActivityCreatedDTO.class);
+            ActivityCompleteDTO dto = mapper.map(activity, ActivityCompleteDTO.class);
             dto.setComments(commentCreatedDTOList);
             return dto;
         }
