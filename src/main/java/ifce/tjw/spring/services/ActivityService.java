@@ -1,8 +1,10 @@
 package ifce.tjw.spring.services;
 
 import ifce.tjw.spring.dto.ActivityCreateDTO;
+import ifce.tjw.spring.dto.CommentCreatedDTO;
+import ifce.tjw.spring.entity.Comment;
+import ifce.tjw.spring.repositories.CommentRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,15 +25,16 @@ public class ActivityService {
     private final ActivityRepository repository;
     private final UserRepository userRepository;
     private final DisciplineRepository disciplineRepository;
-
-    @Autowired
-    private ModelMapper mapper;
+    private final CommentRepository commentRepository;
+    private final ModelMapper mapper;
 
     public ActivityService(ActivityRepository repository, UserRepository userRepository,
-            DisciplineRepository disciplineRepository) {
+                           DisciplineRepository disciplineRepository, CommentRepository commentRepository, ModelMapper mapper) {
         this.repository = repository;
         this.userRepository = userRepository;
         this.disciplineRepository = disciplineRepository;
+        this.commentRepository = commentRepository;
+        this.mapper = mapper;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
@@ -111,11 +114,16 @@ public class ActivityService {
     public ActivityCreatedDTO getActivity(Long userId, Long activityId) {
         Activity activity = repository.getReferenceById(activityId);
         User creator = userRepository.getReferenceById(userId);
+        List<Comment> comments = commentRepository.getAllByActivityId(activityId);
+        List<CommentCreatedDTO> commentCreatedDTOList = new ArrayList<>();
         if(activity == null || creator == null){
             return null;
         }
-        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){ ;
-            return mapper.map(activity, ActivityCreatedDTO.class);
+        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){
+            comments.forEach((comment -> commentCreatedDTOList.add(mapper.map(comment, CommentCreatedDTO.class))));
+            ActivityCreatedDTO dto = mapper.map(activity, ActivityCreatedDTO.class);
+            dto.setComments(commentCreatedDTOList);
+            return dto;
         }
         return null;
     }

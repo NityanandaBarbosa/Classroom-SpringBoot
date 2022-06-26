@@ -35,12 +35,6 @@ public class Activity {
 	@Column
 	private double nota;
 
-	@ManyToMany
-	private Collection<Comment> comments = new ArrayList<Comment>();
-
-	@OneToMany
-	private Collection<Attachment> attachs = new ArrayList<Attachment>();
-
 	public Long getId() {
 		return id;
 	}
@@ -80,23 +74,7 @@ public class Activity {
 	public void setDiscipline(Discipline discipline) {
 		this.discipline = discipline;
 	}
-
-	public Collection<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(Collection<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public Collection<Attachment> getAttachs() {
-		return attachs;
-	}
-
-	public void setAttachs(Collection<Attachment> attachs) {
-		this.attachs = attachs;
-	}
-
+	
 	public double getNota() {
 		return nota;
 	}
