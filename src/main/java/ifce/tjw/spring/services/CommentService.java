@@ -27,10 +27,11 @@ public class CommentService {
         this.userRepository = userRepository;
         this.mapper = mapper;
     }
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public CommentCreatedDTO createComment(CommentDTO dto, Long userId, Long activityId) {
         Comment comment = new Comment();
-        Activity activity= activityRepository.getReferenceById(activityId);
+        Activity activity = activityRepository.getReferenceById(activityId);
         Discipline discipline = activity.getDiscipline();
         User sender = userRepository.getReferenceById(userId);
         if(activity == null || sender == null){
@@ -40,9 +41,22 @@ public class CommentService {
             comment.setMessage(dto.getMessage());
             comment.setActivity(activity);
             comment.setSender(sender);
-//            activity.getComments().add(comment);
             repository.save(comment);
-//            activityRepository.save(activity);
+            return mapper.map(comment, CommentCreatedDTO.class);
+        }
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public CommentCreatedDTO patchComment(CommentDTO dto, Long userId, Long commentId) {
+        Comment comment = repository.getReferenceById(commentId);
+        User sender = userRepository.getReferenceById(userId);
+        if(comment == null || sender == null){
+            return null;
+        }
+        if(comment.getSender() == sender){
+            comment.setMessage(dto.getMessage());
+            repository.save(comment);
             return mapper.map(comment, CommentCreatedDTO.class);
         }
         return null;

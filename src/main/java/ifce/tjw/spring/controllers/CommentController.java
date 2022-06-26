@@ -29,7 +29,23 @@ public class CommentController {
         Long userId = Long.parseLong(payload.get("id"));
         try {
             CommentCreatedDTO createdDTO = service.createComment(dto, userId, activityId);
+            if (createdDTO != null) {
+                return new ResponseEntity<>(createdDTO, HttpStatus.CREATED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
+    @PatchMapping(value = "/{commentId}")
+    public ResponseEntity<CommentCreatedDTO> patchComment(@RequestBody CommentDTO dto,
+                                                           @PathVariable Long commentId,
+                                                           @RequestHeader(name = "Authorization") String token) {
+        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
+        Long userId = Long.parseLong(payload.get("id"));
+        try {
+            CommentCreatedDTO createdDTO = service.patchComment(dto, userId, commentId);
             if (createdDTO != null) {
                 return new ResponseEntity<>(createdDTO, HttpStatus.CREATED);
             }
