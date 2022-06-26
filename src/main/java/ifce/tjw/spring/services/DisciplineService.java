@@ -34,31 +34,32 @@ public class DisciplineService {
 		Discipline discipline = new Discipline();
 		discipline.setName(dto.getName());
 		User owner = userRepository.getReferenceById(userId);
-		if(owner != null) {
+		if (owner != null) {
 			discipline.setOwner(owner);
 			repository.save(discipline);
 			return mapper.map(discipline, DisciplineDTO.class);
-		}else {
+		} else {
 			System.out.println("ERROR");
 		}
 		return null;
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public DisciplineDTO delete(Long id, Long ownerId) throws Exception {
 		Discipline discipline = repository.getReferenceById(id);
-		if(discipline != null) {
-			if(discipline.getOwner().getId() == ownerId){
+		if (discipline != null) {
+			if (discipline.getOwner().getId() == ownerId) {
 				repository.deleteById(id);
 				return mapper.map(discipline, DisciplineDTO.class);
-			}else{
+			} else {
 				throw new Exception("It's not your class to delete!");
 			}
 		}
 		return null;
 	}
-	public List<DisciplineGetDTO> getAllByUserId(Long id) {
-		List<Discipline> studentList = repository.getAllByUserId(id);
+
+	public List<DisciplineGetDTO> getAllByStudentsId(Long id) {
+		List<Discipline> studentList = repository.getAllByStudentsId(id);
 		List<Discipline> professorDisciplines = repository.getAllByOwnerId(id);
 		List<DisciplineGetDTO> listDTO = new ArrayList<>();
 		studentList.forEach((disciplineObj -> listDTO.add(mapper.map(disciplineObj, DisciplineGetDTO.class))));
@@ -70,13 +71,13 @@ public class DisciplineService {
 	public DisciplineGetDTO joinClass(Long classId, Long userId) throws Exception {
 		User user = userRepository.findById(userId).get();
 		Discipline discipline = repository.findById(classId).get();
-		if(discipline.getOwner() == user){
+		if (discipline.getOwner() == user) {
 			throw new Exception("You are the owner");
 		}
-		if(discipline.getUser().contains(user)){
+		if (discipline.getStudents().contains(user)) {
 			throw new Exception("You already in class");
 		}
-		discipline.getUser().add(user);
+		discipline.getStudents().add(user);
 		repository.save(discipline);
 		return mapper.map(discipline, DisciplineGetDTO.class);
 	}

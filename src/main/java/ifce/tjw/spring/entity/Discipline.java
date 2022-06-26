@@ -1,35 +1,31 @@
 package ifce.tjw.spring.entity;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "tbl_discipline")
+@Table(name = "tbl_discipline")
 public class Discipline {
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	@Column(name = "class_name")
 	private String name;
-	
+
 	@OneToOne
 	private User owner;
-	
+
 	@ManyToMany
-	private List<User> user = new ArrayList<User>();
+	private List<User> students = new ArrayList<User>();
 
 	public String getName() {
 		return name;
@@ -47,12 +43,12 @@ public class Discipline {
 		this.owner = owner;
 	}
 
-	public List<User> getUser() {
-		return user;
+	public List<User> getStudents() {
+		return students;
 	}
 
-	public void setUser(List<User> students) {
-		this.user = students;
+	public void setStudents(List<User> students) {
+		this.students = students;
 	}
 
 	public Long getId() {

@@ -46,7 +46,7 @@ public class DisciplineController {
 		Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
 		Long id = Long.parseLong(payload.get("id"));
 		try {
-			List<DisciplineGetDTO> list = service.getAllByUserId(id);
+			List<DisciplineGetDTO> list = service.getAllByStudentsId(id);
 			return new ResponseEntity<>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -67,6 +67,5 @@ public class DisciplineController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 
 }

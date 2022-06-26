@@ -48,7 +48,7 @@ public class ActivityService {
         if(discipline == null || creator == null){
             return null;
         }
-        if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
+        if(discipline.getStudents().contains(creator) || discipline.getOwner() == creator){
             activity.setCreator(creator);
             activity.setDiscipline(discipline);
             repository.save(activity);
@@ -87,7 +87,7 @@ public class ActivityService {
             return null;
         }
         Discipline discipline = activity.getDiscipline();
-        if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
+        if(discipline.getStudents().contains(creator) || discipline.getOwner() == creator){
             repository.delete(activity);
             return mapper.map(activity, ActivityCreatedDTO.class);
         }
@@ -101,7 +101,7 @@ public class ActivityService {
         if(discipline == null || creator == null){
             return null;
         }
-        if(discipline.getUser().contains(creator) || discipline.getOwner() == creator){
+        if(discipline.getStudents().contains(creator) || discipline.getOwner() == creator){
             List<Activity> activityList = repository.getAllByDisciplineId(disciplineId);
             activityList.forEach((activity -> dtoList.add(mapper.map(activity, ActivityCreatedDTO.class))));
             return dtoList;
@@ -117,7 +117,7 @@ public class ActivityService {
         if(activity == null || creator == null){
             return null;
         }
-        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){
+        if(activity.getDiscipline().getStudents().contains(creator) || activity.getDiscipline().getOwner() == creator){
             comments.forEach((comment -> commentCreatedDTOList.add(mapper.map(comment, CommentCreatedDTO.class))));
             ActivityCompleteDTO dto = mapper.map(activity, ActivityCompleteDTO.class);
             dto.setComments(commentCreatedDTOList);

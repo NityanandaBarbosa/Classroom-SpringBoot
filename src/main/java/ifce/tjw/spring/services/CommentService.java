@@ -37,7 +37,7 @@ public class CommentService {
         if(activity == null || sender == null){
             return null;
         }
-        if(discipline.getUser().contains(sender) || discipline.getOwner() == sender){
+        if(discipline.getStudents().contains(sender) || discipline.getOwner() == sender){
             comment.setMessage(dto.getMessage());
             comment.setActivity(activity);
             comment.setSender(sender);
