@@ -63,7 +63,7 @@ public class ActivityService {
         if(activity == null || creator == null){
             return null;
         }
-        if(activity.getDiscipline().getUser().contains(creator) || activity.getDiscipline().getOwner() == creator){
+        if(activity.getCreator() == creator || activity.getDiscipline().getOwner() == creator){
             String tittle = dto.getTittle();
             String description = dto.getDescription();
             if(tittle != null && tittle != ""){
