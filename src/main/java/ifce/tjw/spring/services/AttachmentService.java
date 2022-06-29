@@ -18,9 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.UUID;
 
 @Service
@@ -41,15 +39,13 @@ public class AttachmentService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public void uploadVideo(MultipartFile file, Long userId, Long activityId) {
+    public AttachmentCreatedDTO uploadVideo(MultipartFile file, Long userId, Long activityId) {
         Attachment attachment = new Attachment();
         Activity activity = activityRepository.getReferenceById(activityId);
         Discipline discipline = activity.getDiscipline();
         User user = userRepository.getReferenceById(userId);
         if (activity == null || user == null) {
-            System.out.println("VAZIO");
             throw new RuntimeException("Error to uploadFile");
-//            return null;
         }
         if (discipline.getStudents().contains(user) || discipline.getOwner() == user) {
             System.out.println("VALID");
@@ -63,13 +59,35 @@ public class AttachmentService {
                 attachment.setFileType(filePath+dbFileName);
                 attachment.setFileNameDB(dbFileName);
                 repository.save(attachment);
-//                return mapper.map(attachment, AttachmentCreatedDTO.class);
+                return mapper.map(attachment, AttachmentCreatedDTO.class);
             } catch (IOException e) {
-                System.out.println("ERROR " + e);
                 throw new RuntimeException("Error to uploadFile");
             }
         }
-//        return null;
+        return null;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public AttachmentCreatedDTO deleteAttachmente(Long userId, Long attachmentId) {
+        Attachment attachment = repository.getReferenceById(attachmentId);
+        Activity activity = attachment.getActivity();
+        Discipline discipline = activity.getDiscipline();
+        User user = userRepository.getReferenceById(userId);
+        if (attachmentId == null || user == null) {
+            throw new RuntimeException("401");
+        }
+        if (discipline.getStudents().contains(user) || discipline.getOwner() == user) {
+            try {
+                Files.delete(Paths.get(filePath + attachment.getFileNameDB()));
+                System.out.println("DELETOU");
+                repository.delete(attachment);
+                return mapper.map(attachment, AttachmentCreatedDTO.class);
+            } catch (Exception e) {
+                System.out.println("ERRORRRRRRR " + e);
+                throw new RuntimeException("Error to uploadFile");
+            }
+        }
+        return null;
     }
 
     public void generateFile(String dbFileName,MultipartFile file) throws IOException {

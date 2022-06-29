@@ -2,6 +2,7 @@ package ifce.tjw.spring.config;
 
 import ifce.tjw.spring.dto.*;
 import ifce.tjw.spring.entity.Activity;
+import ifce.tjw.spring.entity.Attachment;
 import ifce.tjw.spring.entity.Comment;
 
 import org.modelmapper.ModelMapper;
@@ -30,6 +31,10 @@ public class MapperConfig {
 
 		modelMapper.createTypeMap(Comment.class, CommentCreatedDTO.class)
 				.<String>addMapping(src -> src.getSender().getNome(), (dest, value) -> dest.setSender(value));
+
+		modelMapper.createTypeMap(Attachment.class, AttachmentCreatedDTO.class)
+				.<String>addMapping(src -> src.getUser().getNome(), (dest, value) -> dest.setSender(value))
+				.<String>addMapping(src -> src.getActivity().getTittle(), (dest, value) -> dest.setActivity(value));
 
 		return modelMapper;
 	}

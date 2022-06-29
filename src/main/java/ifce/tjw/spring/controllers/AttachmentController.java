@@ -22,23 +22,33 @@ public class AttachmentController {
     }
 
     @PostMapping(value = "/file/{activityId}")
-    public ResponseEntity<Object> uploadVideo(@RequestParam MultipartFile file,
+    public ResponseEntity<AttachmentCreatedDTO> uploadVideo(@RequestParam MultipartFile file,
                                                             @RequestHeader(name = "Authorization") String token, @PathVariable Long activityId) {
         Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
         Long userId = Long.parseLong(payload.get("id"));
         try {
-            System.out.println("CONTROLLER2 " + file.getOriginalFilename());
-            service.uploadVideo(file, userId, activityId);
-            System.out.println("CONTROLLER3 " + file.getOriginalFilename());
-            return new ResponseEntity<>("Uploaded", HttpStatus.CREATED);
-//            if (dto != null) {
-//                System.out.println("CONTROLLER4 " + file.getOriginalFilename());
-//                return new ResponseEntity<>(dto, HttpStatus.CREATED);
-//            }
+            AttachmentCreatedDTO dto = service.uploadVideo(file, userId, activityId);
+            if (dto != null) {
+                return new ResponseEntity<>(dto, HttpStatus.CREATED);
+            }
         } catch (Exception e) {
-            System.out.println("ERROR");
-            return new ResponseEntity<>("Exception : "+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @DeleteMapping(value = "/file/{attachmentId}")
+    public ResponseEntity<AttachmentCreatedDTO> deleteAttachment(@RequestHeader(name = "Authorization") String token, @PathVariable Long attachmentId) {
+        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
+        Long userId = Long.parseLong(payload.get("id"));
+        try {
+            AttachmentCreatedDTO dto = service.deleteAttachmente(userId, attachmentId);
+            if (dto != null) {
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

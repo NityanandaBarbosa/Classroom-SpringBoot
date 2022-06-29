@@ -1,12 +1,9 @@
 package ifce.tjw.spring.dto;
 
-import ifce.tjw.spring.entity.Activity;
-import ifce.tjw.spring.entity.User;
-
 public class AttachmentCreatedDTO {
     Long id;
-    Activity activity;
-    String senderName;
+    String activity;
+    String sender;
     String fileName;
     String fileType;
 
@@ -18,20 +15,20 @@ public class AttachmentCreatedDTO {
         this.id = id;
     }
 
-    public Activity getActivity() {
+    public String getActivity() {
         return activity;
     }
 
-    public void setActivity(Activity activity) {
+    public void setActivity(String activity) {
         this.activity = activity;
     }
 
-    public String getSenderName() {
-        return senderName;
+    public String getSender() {
+        return sender;
     }
 
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
+    public void setSender(String senderName) {
+        this.sender = senderName;
     }
 
     public String getFileName() {
