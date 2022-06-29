@@ -32,9 +32,9 @@ public class Attachment {
 	
 	@Column
 	private String fileType;
-	
-	@Lob
-	private byte [] fileLob ;
+
+	@Column
+	private String fileNameDB;
 
 	public Long getId() {
 		return id;
@@ -59,11 +59,29 @@ public class Attachment {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	public void uploadFile(String path) throws IOException {
-		this.fileName = FilenameUtils.removeExtension(FilenameUtils.getName(path));
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public String getFileNameDB() {
+		return fileNameDB;
+	}
+
+	public void setFileNameDB(String fileNameDB) {
+		this.fileNameDB = fileNameDB;
+	}
+
+	public void setFileType(String path) throws IOException {
 		this.fileType = FilenameUtils.getExtension(path);
-		this.fileLob = new ReadLob().getFoto(path);
 	}
 		
 }

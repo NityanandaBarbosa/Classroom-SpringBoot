@@ -7,6 +7,7 @@ import ifce.tjw.spring.utils.UserInfoToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class CommentController {
         Long userId = Long.parseLong(payload.get("id"));
         try {
             CommentCreatedDTO createdDTO = service.createComment(dto, userId, activityId);
+
             if (createdDTO != null) {
                 return new ResponseEntity<>(createdDTO, HttpStatus.CREATED);
             }
