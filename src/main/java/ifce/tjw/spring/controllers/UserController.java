@@ -1,17 +1,13 @@
 package ifce.tjw.spring.controllers;
 
 import ifce.tjw.spring.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import ifce.tjw.spring.dto.UserCreateDTO;
 import ifce.tjw.spring.dto.UserDTO;
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 public class UserController {
 	private final UserService service;
@@ -20,31 +16,25 @@ public class UserController {
 		this.service = service;
 	}
 
+	@GetMapping("/sing-up")
+	public String createUser() {
+		return "sing-up.html";
+	}
+
 	@PostMapping("/sing-up")
-	public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO dto) {
+	public String createUser(UserCreateDTO dto) {
 		try {
-			if(dto.getEmail().isEmpty() || dto.getEmail().isEmpty() || dto.getNome().isEmpty()) {
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			}else {
+			if (dto.getEmail().isEmpty() || dto.getEmail().isEmpty() || dto.getNome().isEmpty()) {
+				return "sing-up-error.html";
+			} else {
 				UserDTO user = service.createUser(dto);
-				
-				if(user != null) {
-					return new ResponseEntity<> (user, HttpStatus.CREATED);
+				if (user != null) {
+					return "login.html";
 				}
 			}
-		}catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			return "sing-up-error.html";
 		}
-		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		return "sing-up-error.html";
 	}
-	
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
-//		try {
-//			UserDTO dto =  service.delete(id);
-//			return new ResponseEntity<> (dto, HttpStatus.OK);
-//		}catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 }

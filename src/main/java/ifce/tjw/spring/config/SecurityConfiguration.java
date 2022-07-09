@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsConfigurationSource corsConfiguration(){
+    CorsConfigurationSource corsConfiguration() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
@@ -42,13 +42,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/sing-up").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth/sing-up").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthFilter(authenticationManager()))
-                .addFilter(new JWTValidateFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/home", true)
+                .failureUrl("/login-error")
+                .permitAll();
+        // .and()
+        // .addFilter(new JWTAuthFilter(authenticationManager()))
+        // .addFilter(new JWTValidateFilter(authenticationManager()))
+        // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
