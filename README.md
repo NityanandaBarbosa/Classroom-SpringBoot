@@ -37,7 +37,7 @@ Basically what you should do now is open src/main/java/ifce/tjw/spring/Applicati
 
 ### 5 - Test endpoints
 
-#### [Download](https://drive.google.com/file/d/1xytiY8Ota8DeAO9IqS-n9WoKY9zIvWuB/view?usp=sharing) our insomnia collection then test the endpoints
+#### [Download](https://drive.google.com/file/d/1tT1btwT8nOF9Vt7_7t3TwcIh1gHTesq-/view?usp=sharing) our insomnia collection then test the endpoints
 ##### Endpoints that you are allowed to request without a jwt token :
     - /auth/sing-up
     - /login
