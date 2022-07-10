@@ -3,7 +3,7 @@ package ifce.tjw.spring.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import ifce.tjw.spring.config.UserId;
+import ifce.tjw.spring.utils.UserId;
 import ifce.tjw.spring.dto.DisciplineGetDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package ifce.tjw.spring.config;
+package ifce.tjw.spring.utils;
 
 import ifce.tjw.spring.repositories.UserRepository;
 import org.springframework.security.core.Authentication;
