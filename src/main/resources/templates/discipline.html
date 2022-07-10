@@ -31,16 +31,17 @@
     <th scope="col">Acessar</th>
   </tr>
   </thead>
-<!--  <tbody>-->
-<!--  <tr data-th-each = "activity : ${activities}">-->
-<!--    <td data-th-text="${discipline.id}"></td>-->
-<!--    <td data-th-text="${discipline.name}"></td>-->
-<!--    <td data-th-text="${discipline.ownerName}"></td>-->
-<!--    <td>-->
-<!--      <a th:href="@{'/activity/' + ${discipline.id}}">Acessar</a>-->
-<!--    </td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
+  <tbody>
+  <tr data-th-each = "activity : ${discipline.list}">
+    <td data-th-text="${activity.id}"></td>
+    <td data-th-text="${activity.tittle}"></td>
+    <td data-th-text="${activity.creatorName}"></td>
+    <td data-th-text="${activity.description}"></td>
+    <td>
+      <a th:href="@{'/one/' + ${activity.id}}">Acessar</a>
+    </td>
+  </tr>
+  </tbody>
 </table>
 </body>
 </html>
