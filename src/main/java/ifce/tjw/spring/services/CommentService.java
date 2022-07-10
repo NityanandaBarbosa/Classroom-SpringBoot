@@ -9,6 +9,7 @@ import ifce.tjw.spring.entity.User;
 import ifce.tjw.spring.repositories.ActivityRepository;
 import ifce.tjw.spring.repositories.CommentRepository;
 import ifce.tjw.spring.repositories.UserRepository;
+import ifce.tjw.spring.utils.UserId;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,7 +33,8 @@ public class CommentService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public CommentCreatedDTO createComment(CommentDTO dto, Long userId, Long activityId) {
+    public CommentCreatedDTO createComment(CommentDTO dto, Long activityId) {
+        Long userId = UserId.getAuthenticatedUserId(userRepository);
         Comment comment = new Comment();
         Activity activity = activityRepository.getReferenceById(activityId);
         Discipline discipline = activity.getDiscipline();

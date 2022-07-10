@@ -114,7 +114,8 @@ public class ActivityService {
         return null;
     }
 
-    public ActivityCompleteDTO getActivity(Long userId, Long activityId) {
+    public ActivityCompleteDTO getActivity(Long activityId) {
+        Long userId = UserId.getAuthenticatedUserId(userRepository);
         Activity activity = repository.getReferenceById(activityId);
         User creator = userRepository.getReferenceById(userId);
         List<Comment> comments = commentRepository.getAllByActivityId(activityId);
@@ -124,9 +125,11 @@ public class ActivityService {
         }
         if (activity.getDiscipline().getStudents().contains(creator)
                 || activity.getDiscipline().getOwner() == creator) {
+            DisciplineCreateDTO disciplineCreateDTO = mapper.map(activity.getDiscipline(), DisciplineCreateDTO.class);
             comments.forEach((comment -> commentCreatedDTOList.add(mapper.map(comment, CommentCreatedDTO.class))));
             ActivityCompleteDTO dto = mapper.map(activity, ActivityCompleteDTO.class);
             dto.setComments(commentCreatedDTOList);
+            dto.setDiscipline(disciplineCreateDTO);
             return dto;
         }
         return null;

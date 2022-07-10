@@ -6,13 +6,14 @@ import ifce.tjw.spring.services.CommentService;
 import ifce.tjw.spring.utils.UserInfoToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService service;
@@ -22,21 +23,17 @@ public class CommentController {
     }
 
     @PostMapping(value = "/{activityId}")
-    public ResponseEntity<CommentCreatedDTO> createComment(@RequestBody CommentDTO dto,
-            @PathVariable Long activityId,
-            @RequestHeader(name = "Authorization") String token) {
-        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
-        Long userId = Long.parseLong(payload.get("id"));
+    public String createComment(CommentDTO dto, @PathVariable Long activityId) {
         try {
-            CommentCreatedDTO createdDTO = service.createComment(dto, userId, activityId);
+            CommentCreatedDTO createdDTO = service.createComment(dto, activityId);
 
             if (createdDTO != null) {
-                return new ResponseEntity<>(createdDTO, HttpStatus.CREATED);
+                return "redirect:/activity/one/" + activityId;
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return "redirect:/activity/" + activityId;
         }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return "redirect:/activity/" + activityId;
     }
 
     @PatchMapping(value = "/{commentId}")

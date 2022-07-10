@@ -52,19 +52,12 @@ public class ActivityController {
     }
 
     @GetMapping(value = "/one/{activityId}")
-    public ResponseEntity<ActivityCompleteDTO> getActivity(@PathVariable Long activityId,
-                                                                     @RequestHeader(name = "Authorization") String token) {
-        Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
-        Long userId = Long.parseLong(payload.get("id"));
-        try {
-            ActivityCompleteDTO dto = service.getActivity(userId, activityId);
-            if (dto != null) {
-                return new ResponseEntity<>(dto, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ModelAndView getActivity(@PathVariable Long activityId) {
+        ActivityCompleteDTO dto = service.getActivity(activityId);
+        System.out.println(dto);
+        ModelAndView mv = new ModelAndView("activity-detail.html");
+        mv.addObject("activity", dto);
+        return mv;
     }
 
     @PatchMapping(value = "/{id}")

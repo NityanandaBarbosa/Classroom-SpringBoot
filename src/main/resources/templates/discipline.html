@@ -20,7 +20,7 @@
     <a class="nav-link" href="/login">Logout</a>
   </li>
 </ul>
-<span>Bem-Vindo!</span>
+<h1>Lista de Postagens</h1>
 <table class="table">
   <thead>
   <tr>
@@ -38,7 +38,7 @@
     <td data-th-text="${activity.creatorName}"></td>
     <td data-th-text="${activity.description}"></td>
     <td>
-      <a th:href="@{'/one/' + ${activity.id}}">Acessar</a>
+      <a th:href="@{'/activity/one/' + ${activity.id}}">Acessar</a>
     </td>
   </tr>
   </tbody>
