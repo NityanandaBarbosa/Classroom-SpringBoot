@@ -70,9 +70,9 @@ public class DisciplineService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineGetDTO joinClass(Long classId, Long userId) throws Exception {
-		User user = userRepository.findById(userId).get();
-		Discipline discipline = repository.findById(classId).get();
+	public DisciplineGetDTO joinClass(DisciplineCreateDTO dto) throws Exception {
+		User user = userRepository.findById(UserId.getAuthenticatedUserId(userRepository)).get();
+		Discipline discipline = repository.findById(dto.getId()).get();
 		if (discipline.getOwner() == user) {
 			throw new Exception("You are the owner");
 		}

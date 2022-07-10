@@ -16,10 +16,13 @@
         <a class="nav-link" aria-current="page" href="/discipline/create-discipline">Criar Sala</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="/discipline/join-class">Juntar a Sala</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="/login">Logout</a>
     </li>
 </ul>
-<span>Lista de salas</span>
+<span>Bem-Vindo!</span>
 <table class="table">
     <thead>
     <tr>
@@ -34,7 +37,9 @@
             <td data-th-text="${discipline.id}"></td>
             <td data-th-text="${discipline.name}"></td>
             <td data-th-text="${discipline.ownerName}"></td>
-            <td data-th-text="${discipline.ownerName}"></td>
+            <td>
+                <a th:href="@{'/activity/' + ${discipline.id}}">Acessar</a>
+            </td>
         </tr>
     </tbody>
 </table>

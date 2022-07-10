@@ -52,18 +52,19 @@ public class DisciplineController {
 		return mv;
 	}
 
-	@PostMapping(value = "/{id}")
-	public ResponseEntity<DisciplineGetDTO> joinClass(@PathVariable Long id,
-			@RequestHeader(name = "Authorization") String token) {
-		Map<String, String> payload = UserInfoToken.getUserInfoFromToken(token);
-		Long userId = Long.parseLong(payload.get("id"));
+	@PostMapping(value = "/join-class")
+	public String joinClass(DisciplineCreateDTO dto) {
 		try {
-			DisciplineGetDTO dto = service.joinClass(id, userId);
-			return new ResponseEntity<>(dto, HttpStatus.OK);
+			DisciplineGetDTO dtoResponse = service.joinClass(dto);
+			return "redirect:/discipline";
 		} catch (Exception e) {
 			System.out.println(e);
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return "redirect:/discipline";
 		}
 	}
 
+	@GetMapping(value = "/join-class")
+	public String joinClass() {
+		return "join-discipline.html";
+	}
 }
