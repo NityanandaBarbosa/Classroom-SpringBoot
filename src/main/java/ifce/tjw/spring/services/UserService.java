@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,12 @@ public class UserService {
 		Optional<User> optUser = Optional.ofNullable(userRepo.findUserByEmail(email));
 		User user = optUser.get();
 		return mapper.map(user, UserDTO.class);
+	}
 
+	public Long getAuthUserID(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String userEmail = authentication.getName();
+		Long id = userRepo.findUserByEmail(userEmail).getId();
+		return id;
 	}
 }

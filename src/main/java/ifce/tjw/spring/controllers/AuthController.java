@@ -14,9 +14,4 @@ public class AuthController {
     public String login_error() {
         return "login-error.html";
     }
-
-    @GetMapping(value = "/home")
-    public String home() {
-        return "home.html";
-    }
 }

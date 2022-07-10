@@ -2,8 +2,8 @@ package ifce.tjw.spring.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import ifce.tjw.spring.config.UserId;
 import ifce.tjw.spring.dto.DisciplineGetDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,8 @@ public class DisciplineService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto, Long userId) {
+	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto) {
+		Long userId = UserId.getAuthenticatedUserId(userRepository);
 		Discipline discipline = new Discipline();
 		discipline.setName(dto.getName());
 		User owner = userRepository.getReferenceById(userId);
@@ -58,9 +59,10 @@ public class DisciplineService {
 		return null;
 	}
 
-	public List<DisciplineGetDTO> getAllByStudentsId(Long id) {
-		List<Discipline> studentList = repository.getAllByStudentsId(id);
-		List<Discipline> professorDisciplines = repository.getAllByOwnerId(id);
+	public List<DisciplineGetDTO> getAllByStudentsId() {
+		Long userId = UserId.getAuthenticatedUserId(userRepository);
+		List<Discipline> studentList = repository.getAllByStudentsId(userId);
+		List<Discipline> professorDisciplines = repository.getAllByOwnerId(userId);
 		List<DisciplineGetDTO> listDTO = new ArrayList<>();
 		studentList.forEach((disciplineObj -> listDTO.add(mapper.map(disciplineObj, DisciplineGetDTO.class))));
 		professorDisciplines.forEach((disciplineObj -> listDTO.add(mapper.map(disciplineObj, DisciplineGetDTO.class))));
