@@ -35,16 +35,10 @@ Once again, taking into account that the Mysql database is already installed, yo
 
 Basically what you should do now is open src/main/java/ifce/tjw/spring/Application.java and look for the package called clients, you'll see a file named as Application.java then you click with right click, move your mouse to "Run As" then click on "Java application".
 
-### 5 - Test endpoints
-
-#### [Download](https://drive.google.com/file/d/1xytiY8Ota8DeAO9IqS-n9WoKY9zIvWuB/view?usp=sharing) our insomnia collection then test the endpoints
-##### Endpoints that you are allowed to request without a jwt token :
-    - /auth/sing-up
-    - /login
-
-- Execute /auth/sing-up to create your user./n
-- Execute /login with your email and password, then save your access_token. 
-- To execute another endpoint o must use Bearer Authentication sending access_token. 
+### 5 - Test application
+- In your browser access http://localhost:8080/
+- Create a account click on 'Castro' button
+- Then you can login in app
 
 ## Stay in touch
 
