@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -31,7 +31,8 @@ public class AttachmentService {
     @Value("${file.upload.dir}")
     private String filePath;
 
-    public AttachmentService(ActivityRepository repository, UserRepository userRepository, ModelMapper mapper, AttachmentRepository repository1) {
+    public AttachmentService(ActivityRepository repository, UserRepository userRepository, ModelMapper mapper,
+            AttachmentRepository repository1) {
         this.activityRepository = repository;
         this.userRepository = userRepository;
         this.repository = repository1;
@@ -56,7 +57,7 @@ public class AttachmentService {
                 UUID uuidName = UUID.randomUUID();
                 String dbFileName = uuidName + file.getOriginalFilename();
                 this.generateFile(dbFileName, file);
-                attachment.setFileType(filePath+dbFileName);
+                attachment.setFileType(filePath + dbFileName);
                 attachment.setFileNameDB(dbFileName);
                 repository.save(attachment);
                 return mapper.map(attachment, AttachmentCreatedDTO.class);
@@ -68,7 +69,7 @@ public class AttachmentService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public AttachmentCreatedDTO deleteAttachmente(Long userId, Long attachmentId) {
+    public AttachmentCreatedDTO deleteAttachment(Long userId, Long attachmentId) {
         Attachment attachment = repository.getReferenceById(attachmentId);
         Activity activity = attachment.getActivity();
         Discipline discipline = activity.getDiscipline();
@@ -90,7 +91,38 @@ public class AttachmentService {
         return null;
     }
 
-    public void generateFile(String dbFileName,MultipartFile file) throws IOException {
+    public Attachment getAttachment(Long userId, Long attachmentId, HttpServletResponse response) {
+        Attachment attachment = repository.getReferenceById(attachmentId);
+        Activity activity = attachment.getActivity();
+        Discipline discipline = activity.getDiscipline();
+        User user = userRepository.getReferenceById(userId);
+        if (attachmentId == null || user == null) {
+            throw new RuntimeException("401");
+        }
+        if (discipline.getStudents().contains(user) || discipline.getOwner() == user) {
+            try {
+                response.setHeader("Content-Disposition", "attachment; filename=" + attachment.getFileName());
+                response.setHeader("Content-Transfer-Encoding", "binary");
+                BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+                FileInputStream fileInputStream = new FileInputStream(filePath + attachment.getFileNameDB());
+                int len;
+                byte[] buf = new byte[1024];
+                while ((len = fileInputStream.read(buf)) > 0) {
+                    outputStream.write(buf, 0, len);
+                }
+                outputStream.close();
+                fileInputStream.close();
+                System.out.println("HERE");
+                response.flushBuffer();
+            } catch (Exception e) {
+                System.out.println(e);
+                throw new RuntimeException("Error to streamFile");
+            }
+        }
+        throw new RuntimeException("Error to streamFile");
+    }
+
+    public void generateFile(String dbFileName, MultipartFile file) throws IOException {
         Path dirPath = Paths.get(filePath);
         Files.createDirectories(dirPath);
         File newFile = new File(filePath + dbFileName);

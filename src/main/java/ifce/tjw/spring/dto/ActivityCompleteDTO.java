@@ -7,6 +7,7 @@ public class ActivityCompleteDTO {
     String tittle;
     String description;
     String creatorName;
+    DisciplineCreateDTO discipline;
     List<CommentCreatedDTO> comments;
 
     public Long getId() {
@@ -47,5 +48,13 @@ public class ActivityCompleteDTO {
 
     public void setComments(List<CommentCreatedDTO> comments) {
         this.comments = comments;
+    }
+
+    public DisciplineCreateDTO getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(DisciplineCreateDTO discipline) {
+        this.discipline = discipline;
     }
 }

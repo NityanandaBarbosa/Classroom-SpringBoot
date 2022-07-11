@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsConfigurationSource corsConfiguration(){
+    CorsConfigurationSource corsConfiguration() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
@@ -42,13 +43,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/sing-up").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth/sing-up").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthFilter(authenticationManager()))
-                .addFilter(new JWTValidateFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/discipline", true)
+                .failureUrl("/login-error")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll();
+        // .and()
+        // .addFilter(new JWTAuthFilter(authenticationManager()))
+        // .addFilter(new JWTValidateFilter(authenticationManager()))
+        // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
