@@ -37,7 +37,7 @@ Basically what you should do now is open src/main/java/ifce/tjw/spring/Applicati
 
 ### 5 - Test application
 - In your browser access http://localhost:8080/
-- Create a account click on 'Castro' button
+- Create a account click on 'Cadastro' button
 - Then you can login in app
 
 ## Stay in touch
