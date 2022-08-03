@@ -2,6 +2,7 @@ package ifce.tjw.spring.services;
 
 import java.util.Optional;
 
+import ifce.tjw.spring.exceptions.UserAlreadyUsed;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -27,12 +28,19 @@ public class UserService {
 	private BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
 	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public UserDTO createUser(UserCreateDTO dto) {
-		User user = new User();
-		user.setEmail(dto.getEmail());
-		user.setNome(dto.getNome());
-		user.setPassword(crypt.encode(dto.getPassword()));
-		return mapper.map(userRepo.save(user), UserDTO.class);
+	public UserDTO createUser(UserCreateDTO dto) throws Exception {
+		try{
+			User user = new User();
+			user.setEmail(dto.getEmail());
+			user.setName(dto.getName());
+			user.setPassword(crypt.encode(dto.getPassword()));
+			userRepo.save(user);
+			return mapper.map(user, UserDTO.class);
+		}catch (Exception e){
+			System.out.println("AQUI");
+			throw new UserAlreadyUsed();
+		}
+
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)

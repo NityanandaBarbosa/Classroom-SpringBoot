@@ -2,7 +2,7 @@ package ifce.tjw.spring.dto;
 
 public class UserDTO {
 	private Long id;
-	private String nome;
+	private String name;
 	private String email;
 	
 	public Long getId() {
@@ -17,10 +17,10 @@ public class UserDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 }

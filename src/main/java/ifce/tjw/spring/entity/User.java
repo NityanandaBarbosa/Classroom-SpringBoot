@@ -18,7 +18,7 @@ public class User {
 	private Long id;
 	
 	@Column (name = "user_name")
-	private String nome;
+	private String name;
 	
 	@Column(unique = true, name = "user_email")
 	private String  email; 
@@ -26,12 +26,12 @@ public class User {
 	@Column(name = "user_password")
 	private String password;
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {

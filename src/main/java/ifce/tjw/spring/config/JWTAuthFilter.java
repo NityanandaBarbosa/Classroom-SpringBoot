@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final int TOKEN_EXPIRES = 1000000000;
+    public static final int TOKEN_EXPIRES = 3600000;
     public static final String SECRET_KET = "classroom";
 
     public final AuthenticationManager authenticationManager;
@@ -52,11 +53,14 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        final String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         UserData userData = (UserData) authResult.getPrincipal();
         Map<String, Object> user = new HashMap<>();
         user.put("name", userData.getName());
         user.put("id", userData.getUserId());
         Date date = new Date(System.currentTimeMillis() + TOKEN_EXPIRES);
+        SimpleDateFormat sdf = new SimpleDateFormat(dateTimeFormat);
+        String dateFormat= sdf.format(date);
         String token = JWT.create()
                 .withSubject(userData.getUsername())
                 .withPayload(user)
@@ -65,7 +69,7 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, String> tokenInfo = new HashMap<>();
         response.setContentType("application/json");
         tokenInfo.put("access_token", token);
-        tokenInfo.put("expires_at", String.valueOf(date));
+        tokenInfo.put("expires_at", dateFormat);
         new ObjectMapper().writeValue(response.getOutputStream(), tokenInfo);
     }
 }

@@ -20,7 +20,7 @@ public class UserData implements UserDetails {
     }
 
     public String getName(){
-        return this.user.get().getNome();
+        return this.user.get().getName();
     }
 
     @Override

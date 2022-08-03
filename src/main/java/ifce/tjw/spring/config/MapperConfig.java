@@ -18,22 +18,22 @@ public class MapperConfig {
 		ModelMapper modelMapper = new ModelMapper();
 
 		modelMapper.createTypeMap(Discipline.class, DisciplineDTO.class)
-				.<String>addMapping(src -> src.getOwner().getNome(), (dest, value) -> dest.setOwnerName(value));
+				.<String>addMapping(src -> src.getOwner().getName(), (dest, value) -> dest.setOwnerName(value));
 
 		modelMapper.createTypeMap(Discipline.class, DisciplineGetDTO.class)
-				.<String>addMapping(src -> src.getOwner().getNome(), (dest, value) -> dest.setOwnerName(value));
+				.<String>addMapping(src -> src.getOwner().getName(), (dest, value) -> dest.setOwnerName(value));
 
 		modelMapper.createTypeMap(Activity.class, ActivityCreatedDTO.class)
-				.<String>addMapping(src -> src.getCreator().getNome(), (dest, value) -> dest.setCreatorName(value));
+				.<String>addMapping(src -> src.getCreator().getName(), (dest, value) -> dest.setCreatorName(value));
 
 		modelMapper.createTypeMap(Activity.class, ActivityCompleteDTO.class)
-				.<String>addMapping(src -> src.getCreator().getNome(), (dest, value) -> dest.setCreatorName(value));
+				.<String>addMapping(src -> src.getCreator().getName(), (dest, value) -> dest.setCreatorName(value));
 
 		modelMapper.createTypeMap(Comment.class, CommentCreatedDTO.class)
-				.<String>addMapping(src -> src.getSender().getNome(), (dest, value) -> dest.setSender(value));
+				.<String>addMapping(src -> src.getSender().getName(), (dest, value) -> dest.setSender(value));
 
 		modelMapper.createTypeMap(Attachment.class, AttachmentCreatedDTO.class)
-				.<String>addMapping(src -> src.getUser().getNome(), (dest, value) -> dest.setSender(value))
+				.<String>addMapping(src -> src.getUser().getName(), (dest, value) -> dest.setSender(value))
 				.<String>addMapping(src -> src.getActivity().getTittle(), (dest, value) -> dest.setActivity(value));
 
 		return modelMapper;

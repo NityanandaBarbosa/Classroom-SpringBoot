@@ -1,5 +1,6 @@
 package ifce.tjw.spring.controllers;
 
+import ifce.tjw.spring.exceptions.UserAlreadyUsed;
 import ifce.tjw.spring.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UserController {
 	@PostMapping("/sing-up")
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO dto) {
 		try {
-			if(dto.getEmail().isEmpty() || dto.getEmail().isEmpty() || dto.getNome().isEmpty()) {
+			if(dto.getEmail().isEmpty() || dto.getEmail().isEmpty() || dto.getName().isEmpty()) {
 				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 			}else {
 				UserDTO user = service.createUser(dto);
@@ -32,8 +33,11 @@ public class UserController {
 					return new ResponseEntity<> (user, HttpStatus.CREATED);
 				}
 			}
-		}catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (UserAlreadyUsed e){
+			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
