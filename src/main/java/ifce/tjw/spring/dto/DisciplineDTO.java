@@ -10,6 +10,10 @@ public class DisciplineDTO {
 	private Long id;
 	private String name;
 	private String ownerName;
+	private String section;
+	private String room;
+	private String subject;
+
 	private List<User> students = new ArrayList<User>();
 	private List<Activity> activities = new ArrayList<Activity>();
 	public Long getId() {
@@ -41,5 +45,23 @@ public class DisciplineDTO {
 	}
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+	public String getSection() {
+		return section;
+	}
+	public void setSection(String section) {
+		this.section = section;
+	}
+	public String getRoom() {
+		return room;
+	}
+	public void setRoom(String room) {
+		this.room = room;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 }

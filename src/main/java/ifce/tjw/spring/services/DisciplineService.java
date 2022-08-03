@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ifce.tjw.spring.dto.DisciplineGetDTO;
+import ifce.tjw.spring.exceptions.MissingRequired;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,18 +30,23 @@ public class DisciplineService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto, Long userId) {
+	public DisciplineDTO createDiscipline(DisciplineCreateDTO dto, Long userId) throws MissingRequired {
 		Discipline discipline = new Discipline();
 		discipline.setName(dto.getName());
 		User owner = userRepository.getReferenceById(userId);
-		if (owner != null) {
+		if(dto.getName() == ""){
+			throw new MissingRequired();
+		}
+		if (owner != null && dto.getName() != null) {
 			discipline.setOwner(owner);
+			discipline.setRoom(dto.getRoom());
+			discipline.setSection(dto.getSection());
+			discipline.setSubject(dto.getSubject());
 			repository.save(discipline);
 			return mapper.map(discipline, DisciplineDTO.class);
 		} else {
-			System.out.println("ERROR");
+			throw new MissingRequired();
 		}
-		return null;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)

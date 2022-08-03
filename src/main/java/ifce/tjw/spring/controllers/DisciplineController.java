@@ -2,6 +2,7 @@ package ifce.tjw.spring.controllers;
 
 import ifce.tjw.spring.Application;
 import ifce.tjw.spring.dto.DisciplineGetDTO;
+import ifce.tjw.spring.exceptions.MissingRequired;
 import ifce.tjw.spring.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +36,8 @@ public class DisciplineController {
 			if (discipline != null) {
 				return new ResponseEntity<>(discipline, HttpStatus.CREATED);
 			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (MissingRequired e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
